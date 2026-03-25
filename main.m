@@ -18,7 +18,7 @@ public_vars.motion_vector = [0, 0]; % (vR, vL)
 public_vars.init_iterations = 1;
 public_vars.pf_enabled = 0;
 public_vars.kf_enabled = 0;
-
+ 
 % I. Build map
 read_only_vars.map = load_map(map_name);
 read_only_vars.map.discretization_step = 0.2;
