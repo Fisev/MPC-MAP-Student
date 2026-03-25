@@ -81,6 +81,8 @@ clear ax ay cx cy i xs ys pgon start_position;
 
 w = waitforbuttonpress;
 
+lidar_measurements(1, 8) = zeros();
+gnss_measurements(1, 2) = zeros();
 
 while true
     
@@ -124,7 +126,9 @@ while true
     public_vars = student_workspace(read_only_vars, public_vars);
     
     read_only_vars.est_position_history = [read_only_vars.est_position_history; public_vars.estimated_pose];
-    
+    lidar_measurements(end+1, :) = read_only_vars.lidar_distances;
+    gnss_measurements(end+1, :) = read_only_vars.gnss_position; 
+
     % 14. Move robot
     private_vars.agent_pose = move_agent(private_vars.agent_pose, public_vars.motion_vector, read_only_vars.agent_drive, read_only_vars.sampling_period);  
     private_vars.agent_position_history = [private_vars.agent_position_history; private_vars.agent_pose];    
@@ -135,4 +139,7 @@ while true
     % 16. Increment counter
     read_only_vars.counter = read_only_vars.counter + 1;
    
+    if(read_only_vars.counter > 150) 
+        break;
+    end
 end

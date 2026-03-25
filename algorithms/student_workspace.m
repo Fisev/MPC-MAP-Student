@@ -25,6 +25,6 @@ public_vars.path = plan_path(read_only_vars, public_vars);
 public_vars = plan_motion(read_only_vars, public_vars);
 
 
-
+ 
 end
 
