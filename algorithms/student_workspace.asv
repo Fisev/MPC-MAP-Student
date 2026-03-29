@@ -43,23 +43,20 @@ if i == 150
     figure('Name','Gnss histograms');
     for gnssChannel = 1:2
         subplot(1, 2, gnssChannel );
-        histogram(gnss_measurements(:, gnssChannel ), 20);
+        histogram(gnssChannelsStandartDev(:, gnssChannel ), 20);
     end
 
 end
 
-%% Task 2
+%%
 if i == 150
     lidar_covariance = cov(lidar_measurements)
     gnss_covariance = cov(gnss_measurements)
 
     mainDiagLidar = diag(lidar_covariance)
     mainDiagGnaa = diag(gnss_covariance)
+
     
-    lidarChannelsStandartDevSquared = lidarChannelsStandartDev.^2
-    gnssChannelsStandartDevSquared = gnssChannelsStandartDev.^2
-
-
     i = i+1;
 end
   
