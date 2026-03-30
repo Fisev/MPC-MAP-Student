@@ -1,24 +1,24 @@
 function [public_vars] = student_workspace(read_only_vars,public_vars)
 %STUDENT_WORKSPACE Summary of this function goes here
 
-numberOfMeassurements = 150;
+numberOfMeassurements = 151;
 global lidar_measurements
 global gnss_measurements
-global i
 
-if isempty(i)
-    i = 1;
+i = read_only_vars.counter;
+
+if isempty(i == 1)
     lidar_measurements = zeros(numberOfMeassurements, 8);
     gnss_measurements  = zeros(numberOfMeassurements, 2);
 end
-
-if i <= 150
+ 
+if i == 1 <= numberOfMeassurements
     lidar_measurements(i, :) = read_only_vars.lidar_distances;
     gnss_measurements(i, :) = read_only_vars.gnss_position;
     i = i+1;
 end
 %% Task 2
-if i == 150
+if i == numberOfMeassurements
     lidarStandartDev = std(lidar_measurements, 0, "all")
     lidarChannelsStandartDev(1) = std(lidar_measurements(:,1), 0, "all");
     lidarChannelsStandartDev(2) = std(lidar_measurements(:,2), 0, "all");
@@ -36,48 +36,47 @@ if i == 150
     figure('Name','LiDAR histograms');
     for lidarChannel = 1:8
         subplot(2, 4, lidarChannel);
-        histogram(lidar_measurements(:, lidarChannel), 50);
+        histogram(lidar_measurements(:, lidarChannel), 90);
         xlabel('Meassurements'); ylabel('Count');
+        title(sprintf('Channel %d', lidarChannel));
     end
 
     figure('Name','Gnss histograms');
     for gnssChannel = 1:2
         subplot(1, 2, gnssChannel );
-        histogram(gnss_measurements(:, gnssChannel ), 50);
+        histogram(gnss_measurements(:, gnssChannel ), 90);
+        title(sprintf('Channel %d', gnssChannel));
     end
 
 end
 
 %% Task 3
-if i == 150
+if i == numberOfMeassurements
     lidar_covariance = cov(lidar_measurements)
     gnss_covariance = cov(gnss_measurements)
 
-    mainDiagLidar = diag(lidar_covariance)
-    mainDiagGnaa = diag(gnss_covariance)
+    mainDiagonalLidar = diag(lidar_covariance)
+    mainDiagonalGnaa = diag(gnss_covariance)
     
     lidarChannelsStandartDevSquared = lidarChannelsStandartDev.^2
     gnssChannelsStandartDevSquared = gnssChannelsStandartDev.^2
-
-
 end
 
 %% Task 4
-if i == 150
-    x = linspace(-4*lidarChannelsStandartDev(1), 4*lidarChannelsStandartDev(1), 1000)
+if i == numberOfMeassurements
+    x_lidar = linspace(-4*lidarChannelsStandartDev(1), 4*lidarChannelsStandartDev(1), 1000);
+    x_gnss = linspace(-4*gnssChannelsStandartDev(1), 4*gnssChannelsStandartDev(1), 1000);
 
-    lidarNormPDF = norm_pdf(x, 0, lidarChannelsStandartDev(1));
-    GNSSNormPDF = norm_pdf(x, 0, gnssChannelsStandartDev(1));
+    lidarNormPDF = norm_pdf(x_lidar, 0, lidarChannelsStandartDev(1));
+    GNSSNormPDF = norm_pdf(x_gnss, 0, gnssChannelsStandartDev(1));
 
-    figure('Name','Gnss histograms')
+    figure('Name','Probability density functions')
     subplot(1, 2, 1);
     
-    plot(x, lidarNormPDF)
+    plot(x_lidar, lidarNormPDF)
 
     subplot(1, 2, 2);
-    plot(x, GNSSNormPDF)
-
-    i = i+1;
+    plot(x_gnss, GNSSNormPDF)
 end
 
 %%
