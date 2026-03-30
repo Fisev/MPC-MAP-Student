@@ -1,5 +1,5 @@
 close all;
-clear;
+clear all;
 clc;
 
 disp('Welcome to MPC-MAP Project, GLHF!')
