@@ -11,7 +11,7 @@ if isempty(i == 1)
     lidar_measurements = zeros(numberOfMeassurements, 8);
     gnss_measurements  = zeros(numberOfMeassurements, 2);
 end
-
+ 
 if i == 1 <= numberOfMeassurements
     lidar_measurements(i, :) = read_only_vars.lidar_distances;
     gnss_measurements(i, :) = read_only_vars.gnss_position;
