@@ -54,11 +54,6 @@ function [public_vars] = plan_motion(read_only_vars, public_vars)
     w = v * curvature;
     w = max(min(w, wMax), -wMax);
 
-    if Ld < 0.05
-        v = 0;
-        w = 0;
-    end
-
     public_vars.motion_vector = [v, w];
 
 end

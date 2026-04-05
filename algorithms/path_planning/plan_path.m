@@ -2,7 +2,7 @@ function [path] = plan_path(read_only_vars, public_vars)
     %PLAN_PATH Summary of this function goes here
 
     %% Task 2
-    N = 10;
+    N = 20;
     x1 = (ones(N, 1) * 2);
     y1 = linspace(1, 9, N)';
     straightLine = [x1, y1];
