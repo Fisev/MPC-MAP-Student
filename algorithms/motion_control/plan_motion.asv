@@ -8,14 +8,32 @@ function [public_vars] = plan_motion(read_only_vars, public_vars)
     
     % II. Compute motion vector
     
-    nextWayPoint = public_vars.path(read_only_vars.counter)
-
-    public_vars.
     pose = read_only_vars.mocap_pose;
     x = pose(1);
     y = pose(2);
     theta = pose(3);
+
+    bestDist = 1000000;
+
+    for i = 1:N
+        dx = path(i,1) - x;
+        dy = path(i,2) - y;
     
+        Lx =  cos(theta)*dx + sin(theta)*dy;
+        Ly = -sin(theta)*dx + cos(theta)*dy;
+    
+        if Lx > 0
+            d = hypot(Lx, Ly);
+            if d < bestDist
+                bestDist = d;
+                nextWayPoint = path(i,:);
+            end
+        end
+    end
+
+
+    nextWayPoint = public_vars.path(read_only_vars.counter);
+
     dx = nextWayPoint(1) - x;
     dy = nextWayPoint(2) - y;
     
