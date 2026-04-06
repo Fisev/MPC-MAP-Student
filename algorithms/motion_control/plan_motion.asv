@@ -17,7 +17,6 @@ function [public_vars] = plan_motion(read_only_vars, public_vars)
     N = size(public_vars.path, 1);
     nextWayPoint = public_vars.path(end,:);
 
-    lookahead = 0.7;
     for i = 1:N
         dx = public_vars.path(i,1) - x;
         dy = public_vars.path(i,2) - y;
@@ -25,11 +24,12 @@ function [public_vars] = plan_motion(read_only_vars, public_vars)
         Lx =  cos(theta)*dx + sin(theta)*dy;
         Ly = -sin(theta)*dx + cos(theta)*dy;
     
-        d  = hypot(Lx, Ly);
-    
-        if Lx > 0 && d >= lookahead
-            nextWayPoint = public_vars.path(i,:);
-            break;
+        if Lx > 0
+            d = hypot(Lx, Ly);
+            if d < bestDist
+                bestDist = d;
+                nextWayPoint = public_vars.path(i,:);
+            end
         end
     end
 
@@ -41,7 +41,7 @@ function [public_vars] = plan_motion(read_only_vars, public_vars)
     
     Ld = hypot(Lx, Ly);
     
-    if Ld < 0.05
+    if Ld < 1e-4
         curvature = 0;
     else
         curvature = 2 * Ly / (Ld^2);
@@ -53,27 +53,7 @@ function [public_vars] = plan_motion(read_only_vars, public_vars)
     v = min(vMax, Ld);
     w = v * curvature;
     w = max(min(w, wMax), -wMax);
-    
-    b = read_only_vars.agent_drive.interwheel_dist;
-    
-    vR = v + 0.5 * b * w;
-    vL = v - 0.5 * b * w;
 
-
-    public_vars.motion_vector = [vR, vL];
+    public_vars.motion_vector = [v, w];
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
