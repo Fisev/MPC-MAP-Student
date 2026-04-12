@@ -1,7 +1,29 @@
 function [new_pose] = predict_pose(old_pose, motion_vector, read_only_vars)
-%PREDICT_POSE Summary of this function goes here
-
-new_pose = old_pose;
-
+    x  = old_pose(1);
+    y  = old_pose(2);
+    th = old_pose(3);
+    
+    vR = motion_vector(1);
+    vL = motion_vector(2);
+    dt = read_only_vars.sampling_period;
+    read_only_vars.agent_drive.interwheel_dist;
+    
+    sigmaV = 0.06;
+    sigmaW = 0.06;
+    vWithNoise = ((vR + vL) / 2) + sigmaV * randn();
+    wWithNoise = ((vR - vL) / read_only_vars.agent_drive.interwheel_dist) + sigmaW * randn();
+    
+%     if abs(wWithNoise) < 1e-5
+%         xNew  = x + vWithNoise * dt * cos(th);
+%         yNew  = y + vWithNoise * dt * sin(th);
+%         thNew = th;
+%     else
+    xNew  = x + (vWithNoise / wWithNoise) * (sin(th + wWithNoise*dt) - sin(th));
+    yNew  = y - (vWithNoise / wWithNoise) * (cos(th + wWithNoise*dt) - cos(th));
+    thNew = th + wWithNoise * dt;
+%     end
+    
+    thNew = wrapToPi(thNew);
+    new_pose = [xNew; yNew; thNew];
 end
 
