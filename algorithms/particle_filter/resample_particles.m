@@ -1,10 +1,10 @@
 function [new_particles] = resample_particles(particles, weights)
     %RESAMPLE_PARTICLES Summary of this function goes here
 
-    numberOfParticals = size(particles,2);
+    numberOfParticals = length(particles);
     new_particles = zeros(size(particles));
     
-    weightsSet = [0 cumsum(weights)'];
+    weightsSet = [0; cumsum(weights)];
     u = rand/numberOfParticals;
     currentWeightSet = 1;
     for i = 1:numberOfParticals

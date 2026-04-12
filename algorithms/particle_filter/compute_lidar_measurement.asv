@@ -11,8 +11,12 @@ function [measurement] = compute_lidar_measurement(map, pose, lidar_config)
     for i = 1:numberOfBeams
         direction = wrapToPi(th + lidar_config(i));
         intersections = ray_cast(currentPose, map.walls, direction);
-        if intersections
-            allMeasurements = sqrt(sum((intersections - currentPose).^2,2));
+        if ~isempty(intersections)
+            temp;
+            for j = 1:length(intersections)
+                WholeMeasurement = sqrt(sum((intersections(j, :) - currentPose).^));
+            end
+            allMeasurements = sqrt(temp);
             measurement(i) = min(allMeasurements);
         end
     end
