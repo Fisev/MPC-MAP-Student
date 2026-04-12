@@ -17,13 +17,15 @@ expected = lidar_distances(1:M);
 predicted = particle_measurements(:, 1:M);
 measurement_noise_sigma = 0.25;
 min_weight = 1e-10;
+inv_sigma2 = 1 / (measurement_noise_sigma^2);
+valid_expected = isfinite(expected) & expected > 0;
 
 weights = zeros(N, 1);
 for i = 1:N
-    valid = isfinite(expected) & isfinite(predicted(i,:)) & expected > 0 & predicted(i,:) > 0;
+    valid = valid_expected & isfinite(predicted(i,:)) & predicted(i,:) > 0;
     if any(valid)
         error_vec = predicted(i, valid) - expected(valid);
-        weights(i) = exp(-0.5 * sum((error_vec ./ measurement_noise_sigma).^2));
+        weights(i) = max(exp(-0.5 * inv_sigma2 * sum(error_vec.^2)), min_weight);
     else
         weights(i) = min_weight;
     end
