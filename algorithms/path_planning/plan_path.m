@@ -13,7 +13,7 @@ function [path] = plan_path(read_only_vars, public_vars)
     circuralArc = [x2, y2];
 
     y3 = linspace(1, 9, N)';
-    x3 = 0.5*sin(0.8*y3)+1;
+    x3 = 0.5*sin(0.8*y3)+1.5;
     sineWawe = [x3, y3];
  
     public_vars.path = sineWawe;
