@@ -8,8 +8,8 @@ function [new_pose] = predict_pose(old_pose, motion_vector, read_only_vars)
     dt = read_only_vars.sampling_period;
     read_only_vars.agent_drive.interwheel_dist;
     
-    sigmaV = 2;
-    sigmaW = 2;
+    sigmaV = 0.8;
+    sigmaW = 0.8;
     vWithNoise = ((vR + vL) / 2) + sigmaV * randn();
     wWithNoise = ((vR - vL) / read_only_vars.agent_drive.interwheel_dist) + sigmaW * randn();
     

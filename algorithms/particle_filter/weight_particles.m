@@ -1,43 +1,25 @@
 function [weights] = weight_particles(particle_measurements, lidar_distances)
-%WEIGHT_PARTICLES Summary of this function goes here
+    %WEIGHT_PARTICLES Summary of this function goes here
 
-% N = size(particle_measurements, 1);
-% weights = ones(N,1) / N;
-    N = size(particle_measurements, 1);
-    if N == 0
-        weights = [];
-        return;
-    end
+    numberOfParticals = size(particle_measurements, 1);
+        
+    measurementNoiseSigma = 0.25;
+    minWeight = 1e-8;
+    validoParticals = isfinite(lidar_distances) & lidar_distances > 0;
     
-    M = min(size(particle_measurements, 2), numel(lidar_distances));
-    if M == 0
-        weights = ones(N,1) / N;
-        return;
-    end
-    
-    expected = lidar_distances(1:M);
-    predicted = particle_measurements(:, 1:M);
-    measurement_noise_sigma = 0.25;
-    min_weight = 1e-10;
-    inv_sigma2 = 1 / (measurement_noise_sigma^2);
-    valid_expected = isfinite(expected) & expected > 0;
-    
-    weights = zeros(N, 1);
-    for i = 1:N
-        valid = valid_expected & isfinite(predicted(i,:)) & predicted(i,:) > 0;
+    weights = zeros(numberOfParticals, 1);
+    for i = 1:numberOfParticals
+        valid = validoParticals & isfinite(particle_measurements(i,:)) & particle_measurements(i,:) > 0;
         if any(valid)
-            error_vec = predicted(i, valid) - expected(valid);
-            weights(i) = max(exp(-0.5 * inv_sigma2 * sum(error_vec.^2)), min_weight);
+            difference = particle_measurements(i, valid) - lidar_distances(valid);
+            weights(i) = max(exp(-0.5 / (measurementNoiseSigma^2) * sum(difference.^2)), minWeight);
         else
-            weights(i) = min_weight;
+            weights(i) = minWeight;
         end
     end
     
     weight_sum = sum(weights);
-    if ~isfinite(weight_sum) || weight_sum <= 0
-        weights = ones(N,1) / N;
-    else
-        weights = weights / weight_sum;
-    end
+
+    weights = weights / weight_sum;
 end
 
