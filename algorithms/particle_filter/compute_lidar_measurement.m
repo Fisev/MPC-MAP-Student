@@ -3,7 +3,7 @@ function [measurement] = compute_lidar_measurement(map, pose, lidar_config)
 
     measurement = zeros(1, length(lidar_config));
         
-    currentPose = pose(1:2).';
+    currentPose = pose(1:2);
     th = pose(3);
     
     numberOfBeams = length(lidar_config);
@@ -13,7 +13,7 @@ function [measurement] = compute_lidar_measurement(map, pose, lidar_config)
         intersections = ray_cast(currentPose, map.walls, direction);
         if ~isempty(intersections)
             for j = 1:length(intersections)
-                WholeMeasurement = sqrt(sum((intersections(j, :) - currentPose).^2));
+                WholeMeasurement(j) = sqrt(sum((intersections(j, :) - currentPose).^2));
             end
             measurement(i) = min(WholeMeasurement);
         end
