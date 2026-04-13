@@ -3,7 +3,7 @@ function [weights] = weight_particles(particle_measurements, lidar_distances)
 
     numberOfParticals = size(particle_measurements, 1);
         
-    measurementNoiseSigma = 0.25;
+    measurementNoiseSigma = 0.8;
     minWeight = 1e-8;
     validoParticals = isfinite(lidar_distances) & lidar_distances > 0;
     

@@ -15,11 +15,10 @@ function [new_particles] = resample_particles(particles, weights)
         new_particles(i, :) = particles(currentWeightSet, :);
     end
 
-    numberOfRandomParticals = 100;
-    random_idx = randperm(numberOfParticals, numberOfRandomParticals);
+    random_idx = randperm(numberOfParticals, 50);
     
-    new_particles(random_idx, 1) = 10 * rand(numberOfRandomParticals, 1);
-    new_particles(random_idx, 2) = 10 * rand(numberOfRandomParticals, 1);
-    new_particles(random_idx, 3) = 2*pi * rand(numberOfRandomParticals, 1);
+    new_particles(random_idx, 1) = 10 * rand(50, 1);
+    new_particles(random_idx, 2) = 10 * rand(50, 1);
+    new_particles(random_idx, 3) = 2*pi * rand(50, 1);
 end
 
