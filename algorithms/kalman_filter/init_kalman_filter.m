@@ -1,5 +1,6 @@
 function [public_vars] = init_kalman_filter(read_only_vars, public_vars)
 %INIT_KALMAN_FILTER Summary of this function goes here
+% Small fallback GNSS variance used only before enough samples are available.
 GNSS_DEFAULT_VARIANCE = 1e-3;
 
 if ~isfield(public_vars, 'kf') || ~isfield(public_vars.kf, 'gnss_samples')

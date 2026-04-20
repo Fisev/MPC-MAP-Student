@@ -1,5 +1,6 @@
 function [public_vars] = student_workspace(read_only_vars,public_vars)
     %STUDENT_WORKSPACE Summary of this function goes here
+    % 100 samples provide a stable GNSS mean/covariance estimate for startup.
     GNSS_INIT_ITERATIONS = 100;
 
     if ~isfield(public_vars, 'init_iterations') || read_only_vars.counter == 1
