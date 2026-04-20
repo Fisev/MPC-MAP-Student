@@ -1,19 +1,20 @@
 function [public_vars] = plan_motion(read_only_vars, public_vars)
     %PLAN_MOTION Summary of this function goes here
-    
-    % I. Pick navigation target
-    
-    %target = get_target(public_vars.estimated_pose, public_vars.path);
-    
-    
-    % II. Compute motion vector
-    
-    pose = read_only_vars.mocap_pose
+
+    if isempty(public_vars.path) || any(isnan(public_vars.estimated_pose))
+        public_vars.motion_vector = [0, 0];
+        return;
+    end
+
+    if public_vars.kf_enabled && ~public_vars.kf.use_known_initial_pose && ~public_vars.kf.is_initialized
+        public_vars.motion_vector = [0, 0];
+        return;
+    end
+
+    pose = public_vars.estimated_pose;
     x = pose(1);
     y = pose(2);
     theta = pose(3);
-
-    bestDist = 1000000;
     N = size(public_vars.path, 1);
     nextWayPoint = public_vars.path(end,:);
 
