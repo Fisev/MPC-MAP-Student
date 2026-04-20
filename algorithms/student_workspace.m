@@ -1,9 +1,10 @@
 function [public_vars] = student_workspace(read_only_vars,public_vars)
     %STUDENT_WORKSPACE Summary of this function goes here
-    init_iterations = 100;
+    GNSS_INIT_ITERATIONS = 100;
 
     if read_only_vars.counter == 1
-        public_vars.init_iterations = init_iterations;
+        % Keep robot static for 100 samples to estimate initial GNSS statistics.
+        public_vars.init_iterations = GNSS_INIT_ITERATIONS;
     end
     
     % 8. Perform initialization procedure

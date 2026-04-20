@@ -17,9 +17,9 @@ if size(public_vars.kf.gnss_samples, 1) >= 2
     gnss_cov = cov(public_vars.kf.gnss_samples);
 else
     gnss_mean = gnss(:);
+    GNSS_DEFAULT_VARIANCE = 1e-3;
     % Conservative fallback variance used only before enough samples are collected.
-    default_variance = 1e-3;
-    gnss_cov = eye(2) * default_variance;
+    gnss_cov = eye(2) * GNSS_DEFAULT_VARIANCE;
 end
 
 public_vars.kf.R = gnss_cov;
