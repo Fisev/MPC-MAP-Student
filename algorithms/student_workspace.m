@@ -1,8 +1,9 @@
 function [public_vars] = student_workspace(read_only_vars,public_vars)
     %STUDENT_WORKSPACE Summary of this function goes here
+    init_iterations = 100;
 
     if read_only_vars.counter == 1
-        public_vars.init_iterations = 100;
+        public_vars.init_iterations = init_iterations;
     end
     
     % 8. Perform initialization procedure

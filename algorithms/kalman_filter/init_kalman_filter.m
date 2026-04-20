@@ -1,7 +1,7 @@
 function [public_vars] = init_kalman_filter(read_only_vars, public_vars)
 %INIT_KALMAN_FILTER Summary of this function goes here
 
-if ~isfield(public_vars, "kf") || ~isfield(public_vars.kf, "gnss_samples")
+if ~isfield(public_vars, 'kf') || ~isfield(public_vars.kf, 'gnss_samples')
     public_vars.kf.gnss_samples = zeros(0,2);
 end
 
@@ -17,6 +17,7 @@ if size(public_vars.kf.gnss_samples, 1) >= 2
     gnss_cov = cov(public_vars.kf.gnss_samples);
 else
     gnss_mean = gnss(:);
+    % Conservative fallback variance used only before enough samples are collected.
     default_variance = 1e-3;
     gnss_cov = eye(2) * default_variance;
 end
