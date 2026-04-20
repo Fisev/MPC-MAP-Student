@@ -18,7 +18,7 @@ if ~kf.use_known_initial_pose && ~kf.is_initialized
     if n >= kf.init_samples
         gnss_mu = mean(kf.gnss_samples, 1);
         gnss_cov = cov(kf.gnss_samples);
-        if any(isnan(gnss_cov), 'all') || rank(gnss_cov) < 2
+        if any(isnan(gnss_cov), 'all') || cond(gnss_cov) > 1e10
             gnss_cov = diag(max(var(kf.gnss_samples, 0, 1), 1e-4));
         end
         

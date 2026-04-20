@@ -10,7 +10,7 @@ end
 
 if isfield(public_vars, 'pf_enabled') && public_vars.pf_enabled && ~isempty(public_vars.particles)
     particles = public_vars.particles(:, 1:3);
-    theta = atan2(mean(sin(particles(:,3))), mean(cos(particles(:,3))));
+    theta = atan2(sum(sin(particles(:,3))), sum(cos(particles(:,3))));
     estimated_pose = [mean(particles(:,1)), mean(particles(:,2)), theta];
 end
 

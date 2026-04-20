@@ -19,5 +19,6 @@ new_mu = mu + K * innovation;
 new_mu(3) = wrapToPi(new_mu(3));
 
 new_sigma = (I - K * H) * sigma * (I - K * H)' + K * Q * K';
+new_sigma = (new_sigma + new_sigma') / 2;
 
 end
