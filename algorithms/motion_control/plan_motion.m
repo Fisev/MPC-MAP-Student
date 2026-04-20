@@ -11,10 +11,10 @@ function [public_vars] = plan_motion(read_only_vars, public_vars)
         return;
     end
 
-    pose = public_vars.estimated_pose;
-    x = pose(1);
-    y = pose(2);
-    theta = pose(3);
+    current_pose = public_vars.estimated_pose;
+    x = current_pose(1);
+    y = current_pose(2);
+    theta = current_pose(3);
     N = size(public_vars.path, 1);
     nextWayPoint = public_vars.path(end,:);
 

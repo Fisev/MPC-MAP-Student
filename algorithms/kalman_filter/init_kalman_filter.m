@@ -3,6 +3,7 @@ function [public_vars] = init_kalman_filter(read_only_vars, public_vars)
 
 public_vars.kf_enabled = 1;
 public_vars.kf.use_known_initial_pose = 0; % 1 = Task 3, 0 = Task 4
+public_vars.kf.known_initial_pose = [2; 2; pi/2];
 public_vars.kf.init_samples = max(100, public_vars.init_iterations);
 public_vars.init_iterations = public_vars.kf.init_samples;
 
@@ -15,7 +16,7 @@ public_vars.kf.gnss_samples = [];
 public_vars.kf.is_initialized = 0;
 
 if public_vars.kf.use_known_initial_pose
-    public_vars.mu = [2; 2; pi/2];
+    public_vars.mu = public_vars.kf.known_initial_pose;
     public_vars.sigma = zeros(3,3);
     public_vars.kf.is_initialized = 1;
 else
