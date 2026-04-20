@@ -2,7 +2,7 @@ function [public_vars] = student_workspace(read_only_vars,public_vars)
     %STUDENT_WORKSPACE Summary of this function goes here
     GNSS_INIT_ITERATIONS = 100;
 
-    if read_only_vars.counter == 1
+    if ~isfield(public_vars, 'init_iterations') || read_only_vars.counter == 1
         % Keep robot static for 100 samples to estimate initial GNSS statistics.
         public_vars.init_iterations = GNSS_INIT_ITERATIONS;
     end
