@@ -1,5 +1,10 @@
 function [public_vars] = plan_motion(read_only_vars, public_vars)
     %PLAN_MOTION Summary of this function goes here
+
+    if read_only_vars.counter <= public_vars.init_iterations
+        public_vars.motion_vector = [0, 0];
+        return;
+    end
     
     % I. Pick navigation target
     
@@ -8,7 +13,7 @@ function [public_vars] = plan_motion(read_only_vars, public_vars)
     
     % II. Compute motion vector
     
-    pose = read_only_vars.mocap_pose
+    pose = read_only_vars.mocap_pose;
     x = pose(1);
     y = pose(2);
     theta = pose(3);
