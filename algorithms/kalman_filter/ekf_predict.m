@@ -16,9 +16,4 @@ function [new_mu, new_sigma] = ekf_predict(mu, sigma, u, kf, dt)
          0, 0, 1];
     
     new_sigma = J*sigma*J'+kf.R;
-
-    u
-    v
-    w
-    theta
 end
