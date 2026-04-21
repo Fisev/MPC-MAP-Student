@@ -21,7 +21,7 @@ public_vars.kf_enabled = 0;
  
 % I. Build map
 read_only_vars.map = load_map(map_name);
-read_only_vars.map.discretization_step = 0.2;
+read_only_vars.map.discretization_step = 0.2;   
 read_only_vars.discrete_map = generate_discrete_map(read_only_vars.map);
 read_only_vars.map.goal_tolerance = 0.5;
 

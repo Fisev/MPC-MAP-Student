@@ -18,6 +18,19 @@ function [path] = plan_path(read_only_vars, public_vars)
  
     public_vars.path = sineWawe;
 %%
+     wayPoints  = [
+            2.0, 2.0;
+            2.0, 7.0;
+            13.0, 7.0;
+            16.0, 4.0;
+            16.0, 2.0];
+    
+    denseWaypoints = [];
+    for i = 1:size(wayPoints,1)-1
+        n = 60;
+        denseWaypoints = [denseWaypoints; linspace(wayPoints(i,1),wayPoints(i+1,1),n)', linspace(wayPoints(i,2),wayPoints(i+1,2),n)'];
+    end
+    public_vars.path = denseWaypoints;
 
     planning_required = 0;
 

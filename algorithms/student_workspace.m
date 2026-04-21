@@ -3,12 +3,17 @@ function [public_vars] = student_workspace(read_only_vars,public_vars)
     
     % 8. Perform initialization procedure
     if (read_only_vars.counter == 1)
-              
         public_vars = init_particle_filter(read_only_vars, public_vars);
         public_vars = init_kalman_filter(read_only_vars, public_vars);
     
     end
     
+    if public_vars.init_iterations > 0
+        public_vars = init_kalman_filter(read_only_vars, public_vars);
+        public_vars.motion_vector  = [0, 0];
+        return;
+    end
+
     % 9. Update particle filter
     public_vars.particles = update_particle_filter(read_only_vars, public_vars);
     

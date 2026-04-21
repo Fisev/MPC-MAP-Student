@@ -1,12 +1,24 @@
 function [public_vars] = init_kalman_filter(read_only_vars, public_vars)
-%INIT_KALMAN_FILTER Summary of this function goes here
+%INIT_KALMAN_FILTER Collect GNSS samples to estimate measurement noise,
 
-public_vars.kf.C = [];
-public_vars.kf.R = [];
-public_vars.kf.Q = [];
+    gnssInitSamples = 50;
 
-public_vars.mu = [];
-public_vars.sigma = [];
+    if ~isfield(public_vars, 'kf')
+        public_vars.kf.gnss_samples = zeros(0, 2);
+        public_vars.kf.C = [1, 0, 0;
+                            0, 1, 0];                               % observation matrix
+        public_vars.kf.interwheel_dist = read_only_vars.agent_drive.interwheel_dist;
+    end
 
+    public_vars.kf.gnss_samples(end+1, :) = read_only_vars.gnss_position(1:2).';
+    n = size(public_vars.kf.gnss_samples, 1);
+
+    public_vars.mu    = [2; 2; pi/2];
+    public_vars.sigma = zeros(3, 3);
+
+    if n >= gnssInitSamples
+        public_vars.kf.Q = cov(public_vars.kf.gnss_samples);                        % measurement noise of sensor
+        public_vars.kf.R = diag([0.0001, 0.0001, 0.0001]);                           % process noise of - noise of model
+        public_vars.init_iterations = 0;
+    end
 end
-

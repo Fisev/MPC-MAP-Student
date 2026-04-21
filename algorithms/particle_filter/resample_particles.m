@@ -18,8 +18,8 @@ function [new_particles] = resample_particles(particles, weights)
     numberOfRandomParticals = 100;
     random_idx = randperm(numberOfParticals, numberOfRandomParticals);
     
-    new_particles(random_idx, 1) = 10 * rand(numberOfRandomParticals, 1);
-    new_particles(random_idx, 2) = 10 * rand(numberOfRandomParticals, 1);
+    new_particles(random_idx, 1) = 20 * rand(numberOfRandomParticals, 1);
+    new_particles(random_idx, 2) = 15 * rand(numberOfRandomParticals, 1);
     new_particles(random_idx, 3) = 2*pi * rand(numberOfRandomParticals, 1);
 end
 

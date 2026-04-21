@@ -7,8 +7,8 @@ function [public_vars] = plan_motion(read_only_vars, public_vars)
     
     
     % II. Compute motion vector
-    
-    pose = read_only_vars.mocap_pose
+    %pose = read_only_vars.mocap_pose
+    pose = public_vars.estimated_pose;
     x = pose(1);
     y = pose(2);
     theta = pose(3);
@@ -17,7 +17,7 @@ function [public_vars] = plan_motion(read_only_vars, public_vars)
     N = size(public_vars.path, 1);
     nextWayPoint = public_vars.path(end,:);
 
-    lookahead = 0.7;
+    lookahead = 1.5;
     for i = 1:N
         dx = public_vars.path(i,1) - x;
         dy = public_vars.path(i,2) - y;
