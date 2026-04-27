@@ -1,23 +1,17 @@
 function [path] = astar(read_only_vars, public_vars)
-%ASTAR Plans a path on the occupancy grid using A* with a priority queue.
-%   8-connected grid, Euclidean heuristic. Obstacles are inflated so that
-%   the returned path keeps a clearance of at least 0.2 m.
 
     path = [];
 
-    % I. Retrieve map and parameters
     map    = read_only_vars.discrete_map.map;          % 1 = obstacle, 0 = free
     step   = read_only_vars.map.discretization_step;
     limits = read_only_vars.discrete_map.limits;       % [xmin ymin xmax ymax]
 
-    % II. Inflate obstacles to enforce 0.2 m clearance
     inflationSize = ceil(0.2 / step);
     kernel = ones(2*inflationSize + 1);
     inflatedMap = conv2(double(map), kernel, 'same') > 0;
 
     [ySize, xSize] = size(map);    % rows = y, cols = x
 
-    % III. Convert continuous start/goal to grid cells [row, col] = [yCell, xCell]
     startCellX = floor((public_vars.estimated_pose(1) - limits(1)) / step) + 1;
     startCellY = floor((public_vars.estimated_pose(2) - limits(2)) / step) + 1;
     goalCellX  = floor((read_only_vars.map.goal(1)    - limits(1)) / step) + 1;
@@ -45,10 +39,8 @@ function [path] = astar(read_only_vars, public_vars)
 
     queue = [f_start, start(1), start(2)];      % [f, r, c]
 
-    % VI. A* main loop
     found = false;
     while ~isempty(queue)
-        % Pop the node with the lowest f
         [~, idx] = min(queue(:, 1));
         r = queue(idx, 2);
         c = queue(idx, 3);
