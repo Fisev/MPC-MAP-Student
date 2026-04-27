@@ -15,20 +15,20 @@ function [public_vars] = plan_motion(read_only_vars, public_vars)
 
     bestDist = 1000000;
     N = size(public_vars.path, 1);
-    nextWayPoint = public_vars.path(end,:);
 
+    dx = public_vars.path(:,1) - x;
+    dy = public_vars.path(:,2) - y;
+    [~, i_near] = min(hypot(dx, dy));
+    
+    nextWayPoint = public_vars.path(end, :);
     lookahead = 1.5;
-    for i = 1:N
+    for i = i_near : N
         dx = public_vars.path(i,1) - x;
         dy = public_vars.path(i,2) - y;
-    
         Lx =  cos(theta)*dx + sin(theta)*dy;
         Ly = -sin(theta)*dx + cos(theta)*dy;
-    
-        d  = hypot(Lx, Ly);
-    
-        if Lx > 0 && d >= lookahead
-            nextWayPoint = public_vars.path(i,:);
+        if Lx > 0 && hypot(Lx, Ly) >= lookahead
+            nextWayPoint = public_vars.path(i, :);
             break;
         end
     end
