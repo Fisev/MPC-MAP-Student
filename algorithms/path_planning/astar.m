@@ -12,54 +12,43 @@ function [path] = astar(read_only_vars, public_vars)
 
     [ySize, xSize] = size(map);    % rows = y, cols = x
 
-    startCellX = floor((public_vars.estimated_pose(1) - limits(1)) / step) + 1;
-    startCellY = floor((public_vars.estimated_pose(2) - limits(2)) / step) + 1;
-    goalCellX  = floor((read_only_vars.map.goal(1)    - limits(1)) / step) + 1;
-    goalCellY  = floor((read_only_vars.map.goal(2)    - limits(2)) / step) + 1;
+    startCellX = floor((public_vars.estimated_pose(1)) / step) + 1;
+    startCellY = floor((public_vars.estimated_pose(2)) / step) + 1;
+    goalCellX  = floor((read_only_vars.map.goal(1) ) / step) + 1;
+    goalCellY  = floor((read_only_vars.map.goal(2)) / step) + 1;
 
     start = [startCellY, startCellX];
     goal  = [goalCellY,  goalCellX];
-
-    if inflatedMap(start(1), start(2)) || inflatedMap(goal(1), goal(2))
-        disp('A*: start or goal is occupied.');
-        return;
-    end
 
     actions = [-1  0;  1  0;  0 -1;  0  1;
                -1 -1; -1  1;  1 -1;  1  1];
     costs   = [1; 1; 1; 1; sqrt(2); sqrt(2); sqrt(2); sqrt(2)];
 
     G = inf(ySize, xSize);
-    parent_r = zeros(ySize, xSize);
-    parent_c = zeros(ySize, xSize);
+    parentRow = zeros(ySize, xSize);
+    parentCollumn = zeros(ySize, xSize);
     closed   = false(ySize, xSize);
 
     G(start(1), start(2)) = 0;
-    f_start = norm(start - goal) * step;
+    fStart = norm(start - goal) * step;
 
-    queue = [f_start, start(1), start(2)];      % [f, r, c]
+    queue = [fStart, start(1), start(2)];      % [f, r, c]
 
-    found = false;
     while ~isempty(queue)
         [~, idx] = min(queue(:, 1));
-        r = queue(idx, 2);
-        c = queue(idx, 3);
+        row = queue(idx, 2);
+        collumn = queue(idx, 3);
         queue(idx, :) = [];
 
-        if closed(r, c)
+        if closed(row, collumn)
             continue;
         end
 
-        if r == goal(1) && c == goal(2)
-            found = true;
-            break;
-        end
-
-        closed(r, c) = true;
+        closed(row, collumn) = true;
 
         for k = 1:size(actions, 1)
-            nr = r + actions(k, 1);
-            nc = c + actions(k, 2);
+            nr = row + actions(k, 1);
+            nc = collumn + actions(k, 2);
             if nr < 1 || nr > ySize || nc < 1 || nc > xSize
                 continue;
             end
@@ -67,11 +56,11 @@ function [path] = astar(read_only_vars, public_vars)
                 continue;
             end
 
-            g_new = G(r, c) + costs(k) * step;
+            g_new = G(row, collumn) + costs(k) * step;
             if g_new < G(nr, nc)
                 G(nr, nc) = g_new;
-                parent_r(nr, nc) = r;
-                parent_c(nr, nc) = c;
+                parentRow(nr, nc) = row;
+                parentCollumn(nr, nc) = collumn;
                 f_new = g_new + norm([nr, nc] - goal) * step;
                 queue = [queue; f_new, nr, nc];
             end
@@ -79,12 +68,13 @@ function [path] = astar(read_only_vars, public_vars)
     end
 
     cells = goal;
-    r = goal(1); c = goal(2);
-    while ~(r == start(1) && c == start(2))
-        pr = parent_r(r, c);
-        pc = parent_c(r, c);
+    row = goal(1); collumn = goal(2);
+    while ~(row == start(1) && collumn == start(2))
+        pr = parentRow(row, collumn);
+        pc = parentCollumn(row, collumn);
         cells = [pr, pc; cells];
-        r = pr; c = pc;
+        row = pr; 
+        collumn = pc;
     end
 
     ys = limits(2) + (cells(:, 1) - 0.5) * step;
