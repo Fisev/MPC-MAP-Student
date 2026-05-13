@@ -1,0 +1,44 @@
+9,19
+0,0,15,20
+% ---- Indoor building perimeter ----
+% Bottom wall – entry gap at x=9..11 (robot comes from south)
+2,6,9,6
+11,6,13,6
+% Left wall
+2,6,2,13
+% Right wall
+13,6,13,13
+% Top wall – exit gap at x=7..10 (path continues north to goal)
+2,13,7,13
+10,13,13,13
+% ---- Interior S-shaped dividers ----
+% First divider y=9.5:  left-wall → x=9.5  (corridor gap on right)
+2,9.5,9.5,9.5
+% Second divider y=11:  x=5.5 → right-wall  (corridor gap on left)
+5.5,11,13,11
+% Close the upper-left pocket
+5.5,11,5.5,13
+% Close the upper-right pocket
+9.5,9.5,9.5,11
+% ---- External obstacle 1: hexagon lower-left ----
+3,1,5.5,1
+5.5,1,7,3
+7,3,5.5,5
+5.5,5,3,5
+3,5,1.5,3
+1.5,3,3,1
+% ---- External obstacle 2: staircase lower-right ----
+10.5,2,13,2
+13,2,13,4
+13,4,15,4
+15,4,15,6
+% ---- External obstacle 3: large polygon upper-right ----
+% (sits above indoor zone to the right – goal at (9,19) stays left of it)
+11,14,14,14
+14,14,15,17
+15,17,13.5,20
+13.5,20,11,20
+11,20,10,17.5
+10,17.5,11,14
+inf
+1.5,5.5,13.5,5.5,13.5,13.5,1.5,13.5
